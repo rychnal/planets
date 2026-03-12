@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 
 export default function PlanetsPage() {
-  const PAGE_SIZE = 10;
+  const PAGE_SIZE = 5;
   const searchParams = useSearchParams();
   const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page')!, 10) : 1;
   const router = useRouter();
