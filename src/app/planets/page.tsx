@@ -37,7 +37,14 @@ export default function PlanetsPage() {
             <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
           </div>
         )}
-        {error && <p className="text-center py-4 text-red-400">Chyba: {error}</p>}
+        {error && (
+          <div className="flex flex-col items-center gap-3 py-8">
+            <p className="text-red-400">Error: {error}</p>
+            <button onClick={() => fetchPlanets()} className="px-4 py-2 bg-gray-700/60 hover:bg-gray-600/60 rounded-lg cursor-pointer text-sm">
+              Try again
+            </button>
+          </div>
+        )}
         {!loading && !error && planets.length > 0 && <PlanetsList planets={paginatedPlanets} currentPage={currentPage} totalPages={totalPages} />}
       </div>
      

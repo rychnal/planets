@@ -23,10 +23,27 @@ A Next.js application for exploring planets from the Star Wars universe.
 
 ```bash
 npm install
+```
+
+Create a `.env.local` file in the root:
+
+```
+NEXT_PUBLIC_API_URL=https://swapi.info/api
+```
+
+```bash
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Environment Variables
+
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_API_URL` | Base URL for the SWAPI API |
+
+For production (Vercel), add the variable in **Project Settings → Environment Variables**.
 
 ## Project Structure
 

@@ -18,12 +18,14 @@ export const usePlanetsStore = create<PlanetsState>((set) => ({
   fetchPlanets: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch("https://swapi.info/api/planets");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/planets`);
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
       const data = await res.json();
       set({ planets: data, loading: false });
     } catch (error) {
-      set({ error: (error as Error).message, loading: false });
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      set({ error: message, loading: false });
     }
+
   }
 }));
