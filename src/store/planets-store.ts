@@ -9,7 +9,7 @@ type PlanetsState = {
 };
 
 
-export const usePlanetsStore = create<PlanetsState>((set, get) => ({
+export const usePlanetsStore = create<PlanetsState>((set) => ({
   planets: [],
   loading: false,
   error: null,
