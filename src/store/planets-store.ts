@@ -1,5 +1,3 @@
-'use client';
-
 import type { Planet } from '@/types/planets';
 import { create } from 'zustand';
 
@@ -11,7 +9,7 @@ type PlanetsState = {
 };
 
 
-export const usePlanetsStore = create<PlanetsState>((set) => ({
+export const usePlanetsStore = create<PlanetsState>((set, get) => ({
   planets: [],
   loading: false,
   error: null,

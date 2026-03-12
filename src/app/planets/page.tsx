@@ -2,11 +2,11 @@
 import PlanetsList from "@/components/PlanetsList";
 import { usePlanetsStore } from "@/store/planets-store";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
+const PAGE_SIZE = 5;
 
-export default function PlanetsPage() {
-  const PAGE_SIZE = 5;
+function PlanetsContent() {
   const searchParams = useSearchParams();
   const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page')!, 10) : 1;
   const router = useRouter();
@@ -20,35 +20,41 @@ export default function PlanetsPage() {
     fetchPlanets();
   }, []);
 
-
-  const handleReload = () => { 
+  const handleReload = () => {
     router.push("/planets");
     fetchPlanets();
   }
+
+  return (
+    <div className="bg-gray-500/80 p-4 min-[900px]:p-8 rounded-lg w-full min-[900px]:w-[900px] min-[900px]:min-h-[700px]">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-6xl font-bold">Planety</h1>
+        <button onClick={() => handleReload()} className="text-sm px-3 py-1 bg-gray-700/60 hover:bg-gray-600/60 rounded-lg cursor-pointer">Reload</button>
+      </div>
+      {(loading || planets.length === 0) && !error && (
+        <div className="flex justify-center py-8">
+          <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+        </div>
+      )}
+      {error && (
+        <div className="flex flex-col items-center gap-3 py-8">
+          <p className="text-red-400">Error: {error}</p>
+          <button onClick={() => fetchPlanets()} className="px-4 py-2 bg-gray-700/60 hover:bg-gray-600/60 rounded-lg cursor-pointer text-sm">
+            Zkus znova
+          </button>
+        </div>
+      )}
+      {!loading && !error && planets.length > 0 && <PlanetsList planets={paginatedPlanets} currentPage={currentPage} totalPages={totalPages} />}
+    </div>
+  );
+}
+
+export default function PlanetsPage() {
   return (
     <div className="flex flex-col items-center justify-start min-h-screen pt-8">
-      <div className="bg-gray-500/80 p-4 min-[900px]:p-8 rounded-lg w-full min-[900px]:w-[900px] min-[900px]:min-h-[700px]">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-6xl font-bold">Planety</h1>
-          <button onClick={() => handleReload()} className="text-sm px-3 py-1 bg-gray-700/60 hover:bg-gray-600/60 rounded-lg cursor-pointer">Reload</button>
-        </div>
-        {(loading || planets.length === 0) && !error && (
-          <div className="flex justify-center py-8">
-            <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-          </div>
-        )}
-        {error && (
-          <div className="flex flex-col items-center gap-3 py-8">
-            <p className="text-red-400">Error: {error}</p>
-            <button onClick={() => fetchPlanets()} className="px-4 py-2 bg-gray-700/60 hover:bg-gray-600/60 rounded-lg cursor-pointer text-sm">
-              Try again
-            </button>
-          </div>
-        )}
-        {!loading && !error && planets.length > 0 && <PlanetsList planets={paginatedPlanets} currentPage={currentPage} totalPages={totalPages} />}
-      </div>
-     
+      <Suspense fallback={<div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />}>
+        <PlanetsContent />
+      </Suspense>
     </div>
-
   );
 }
